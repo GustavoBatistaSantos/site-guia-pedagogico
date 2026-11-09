@@ -581,26 +581,6 @@ a:focus-visible, button:focus-visible{
 .home-card[data-axis="3"]{border-top:4px solid var(--eixo3);}
 .home-card[data-axis="4"]{border-top:4px solid var(--eixo4);}
 
-.home-card-body ul{
-  margin-top:12px;
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-.home-card-body ul li{
-  font-size:.82rem;
-  line-height:1.45;
-  color:var(--ink-soft);
-  padding-left:14px;
-  position:relative;
-}
-.home-card-body ul li::before{
-  content:"";
-  position:absolute;left:0;top:.55em;
-  width:5px;height:5px;border-radius:50%;
-  background:currentColor;
-}
-
 /* =========================================================
    RESPONSIVE
    ========================================================= */
