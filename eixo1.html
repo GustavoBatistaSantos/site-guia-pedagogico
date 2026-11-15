@@ -10,6 +10,10 @@ Identidades, Representações e Estereótipos | O Nordeste em Nós</title>
 <link rel="stylesheet" href="styles.css">
 <style>:root{--axis-color:var(--eixo1);--axis-bg:var(--eixo1-bg);}</style>
 </head>
+<dialog id="lightbox" aria-label="Imagem ampliada">
+  <button class="lb-close" type="button" aria-label="Fechar">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</dialog>
 <body>
 
 <button class="sidebar-toggle" aria-label="Abrir menu de navegação" aria-expanded="false">
@@ -142,9 +146,13 @@ Identidades, Representações e Estereótipos</h2>
           <span class="nav-card-num" style="background:var(--eixo3);">3</span>
           <h4>DIVERSIDADE CULTURAL NORDESTINA</h4>
         </div>
-        <div class="nav-card-media" style="background:var(--eixo3-bg);">
-           <img src="imagens/diversidade_cultural_nordestina.jpeg" alt="Capa do livro A Invenção do Nordeste" loading="lazy">
-        </div>
+        <div class="nav-card-media slideshow"  aria-roledescription="carrossel" aria-label="Imagens sobre a diversidade cultural do Nordeste">
+          <img class="slide is-active" src="imagens/diversidade_cultural_nordestina.jpeg" alt="Capa do livro A Invenção do Nordeste e outras artes">
+          <img class="slide" src="imagens/diversidade_cultural_nordestina1.jpeg" alt="Descreva a segunda imagem" loading="lazy">
+          <img class="slide" src="imagens/diversidade_cultural_nordestina2.jpeg" alt="Descreva a terceira imagem" loading="lazy">
+
+  <div class="slide-dots" aria-hidden="true"></div>
+</div>
         <div class="nav-card-body">
           <p>Manifestações culturais, saberes, tradições e patrimônios que revelam a pluralidade do Nordeste.</p>
           <a class="btn-acessar" href="https://www.youtube.com/watch?v=1WIWe0EsCIk&t=188s" style="border-color:var(--eixo3);color:var(--eixo3);">ACESSAR <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M13 6l6 6-6 6"/></svg></a>

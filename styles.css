@@ -594,6 +594,60 @@ a:focus-visible, button:focus-visible{
 .home-card[data-axis="3"]{border-top:4px solid var(--eixo3);}
 .home-card[data-axis="4"]{border-top:4px solid var(--eixo4);}
 
+.slideshow {
+  position: relative;
+  height: 260px;               /* ajuste ao seu layout */
+  overflow: hidden;
+  background: var(--card-bg);
+}
+
+.slideshow .slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;         /* use "cover" se quiser preencher cortando as bordas */
+  padding: 12px;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+
+.slideshow .slide.is-active {
+  opacity: 1;
+}
+
+.slideshow .slide {
+  cursor: zoom-in;
+}
+
+.slide-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.slide-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .6);
+  box-shadow: 0 0 2px rgba(0, 0, 0, .5);
+  cursor: pointer;
+}
+
+.slide-dots span.is-active {
+  background: var(--card-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideshow .slide { transition: none; }
+}
+
 /* =========================================================
    RESPONSIVE
    ========================================================= */
@@ -623,4 +677,34 @@ a:focus-visible, button:focus-visible{
 
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important; scroll-behavior:auto!important;}
+}
+
+/* =========================================================
+   LIGHTBOX (zoom das imagens do carrossel)
+   ========================================================= */
+#lightbox{
+  border:none;
+  padding:0;
+  background:transparent;
+  max-width:95vw;
+  max-height:95vh;
+  overflow:visible;
+}
+#lightbox::backdrop{background:rgba(0,0,0,.85);}
+#lightbox img{
+  display:block;
+  max-width:95vw;
+  max-height:88vh;
+  object-fit:contain;
+  border-radius:4px;
+}
+.lb-close{
+  position:absolute;
+  top:-40px;
+  right:0;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:2.2rem;
+  line-height:1;
 }
