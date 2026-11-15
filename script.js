@@ -30,10 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.innerWidth <= 980) closeSidebar();
     });
   });
+
   // ---------- Carrossel + zoom (lightbox) ----------
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const shows = [];
+
+  // abre o zoom com qualquer imagem
+  function openLightbox(img){
+    if (!lightbox) return;
+    shows.forEach(s => s.stop());
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt;
+    lightbox.showModal();
+  }
 
   document.querySelectorAll('.slideshow').forEach(show => {
     const slides = show.querySelectorAll('.slide');
@@ -72,20 +82,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // clique no carrossel = zoom no slide que está visível agora
     show.addEventListener('click', e => {
-      if (!lightbox || e.target.closest('.slide-dots')) return;
-      const img = slides[current];
-      shows.forEach(s => s.stop());
-      lightboxImg.src = img.currentSrc || img.src;
-      lightboxImg.alt = img.alt;
-      lightbox.showModal();
+      if (e.target.closest('.slide-dots')) return;
+      openLightbox(slides[current]);
     });
 
     shows.push({ start, stop });
     start();
   });
 
+  // imagens avulsas dos cards (uma foto só) também abrem em zoom
+  document.querySelectorAll('.nav-card-media img').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img));
+  });
+
   if (lightbox) {
-    // pausa os carrosséis enquanto o zoom está aberto
+    // retoma os carrosséis quando o zoom é fechado
     lightbox.addEventListener('close', () => shows.forEach(s => s.start()));
     lightbox.addEventListener('click', e => {
       if (e.target === lightbox || e.target.classList.contains('lb-close')) lightbox.close();
