@@ -406,12 +406,25 @@ a:focus-visible, button:focus-visible{
   color:var(--navy-900);
 }
 .nav-card-media{
-  height:120px;
+  height:260px;
   background:var(--card-bg,var(--eixo1-bg));
   display:flex;
   align-items:center;
   justify-content:center;
+  padding: 12px;
+  overflow: hidden;
 }
+
+.nav-card-media img {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);  /* dá efeito de livro "em destaque" */
+}
+
 .nav-card-media svg{width:56%;height:56%;color:var(--card-color,var(--eixo1));opacity:.85;}
 .nav-card-body{
   padding:12px 14px 16px;
