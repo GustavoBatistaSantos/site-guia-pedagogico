@@ -713,6 +713,9 @@ a:focus-visible, button:focus-visible{
 /* =========================================================
    LIGHTBOX (zoom das imagens do carrossel)
    ========================================================= */
+/* =========================================================
+   LIGHTBOX (zoom das imagens do carrossel)
+   ========================================================= */
 #lightbox{
   border:none;
   padding:0;
@@ -729,6 +732,8 @@ a:focus-visible, button:focus-visible{
   object-fit:contain;
   border-radius:4px;
 }
+
+/* botão de fechar */
 .lb-close{
   position:absolute;
   top:-40px;
@@ -738,4 +743,49 @@ a:focus-visible, button:focus-visible{
   color:#fff;
   font-size:2.2rem;
   line-height:1;
+  cursor:pointer;
+}
+
+/* setas de navegação */
+.lb-nav{
+  position:fixed;
+  top:50%;
+  transform:translateY(-50%);
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,.16);
+  color:#fff;
+  font-size:2rem;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:background .15s ease;
+}
+.lb-nav:hover{background:rgba(255,255,255,.32);}
+.lb-nav[hidden]{display:none;}
+.lb-prev{left:16px;}
+.lb-next{right:16px;}
+
+/* contador (ex.: 2 / 5) */
+.lb-counter{
+  position:fixed;
+  bottom:16px;
+  left:0;
+  right:0;
+  text-align:center;
+  color:#fff;
+  font-size:.85rem;
+  font-weight:700;
+  text-shadow:0 1px 4px rgba(0,0,0,.6);
+  pointer-events:none;
+}
+
+@media (max-width:640px){
+  .lb-nav{width:40px;height:40px;font-size:1.6rem;}
+  .lb-prev{left:6px;}
+  .lb-next{right:6px;}
 }

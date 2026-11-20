@@ -34,19 +34,41 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------- Carrossel + zoom (lightbox) ----------
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
+  const btnPrev = lightbox ? lightbox.querySelector('.lb-prev') : null;
+  const btnNext = lightbox ? lightbox.querySelector('.lb-next') : null;
+  const counter = lightbox ? lightbox.querySelector('.lb-counter') : null;
   const shows = [];
 
-  // abre o zoom com qualquer imagem
-  function openLightbox(img){
-    if (!lightbox) return;
-    shows.forEach(s => s.stop());
+  let group = [];      // imagens do carrossel (ou a imagem avulsa) em zoom
+  let gIdx = 0;        // posição atual dentro do grupo
+  let activeShow = null;
+
+  function renderLightbox(){
+    const img = group[gIdx];
     lightboxImg.src = img.currentSrc || img.src;
     lightboxImg.alt = img.alt;
+    const multi = group.length > 1;
+    btnPrev.hidden = btnNext.hidden = !multi;
+    counter.textContent = multi ? (gIdx + 1) + ' / ' + group.length : '';
+  }
+  function lbGo(n){
+    gIdx = (n + group.length) % group.length;
+    renderLightbox();
+  }
+
+  // abre o zoom: recebe a lista de imagens, a posição e (opcional) o carrossel de origem
+  function openLightbox(images, index, show){
+    if (!lightbox) return;
+    shows.forEach(s => s.stop());
+    group = images;
+    gIdx = index;
+    activeShow = show || null;
+    renderLightbox();
     lightbox.showModal();
   }
 
   document.querySelectorAll('.slideshow').forEach(show => {
-    const slides = show.querySelectorAll('.slide');
+    const slides = [...show.querySelectorAll('.slide')];
     const dotsBox = show.querySelector('.slide-dots');
     let current = 0;
     let timer = null;
@@ -80,24 +102,53 @@ document.addEventListener('DOMContentLoaded', () => {
     show.addEventListener('mouseenter', stop);
     show.addEventListener('mouseleave', start);
 
-    // clique no carrossel = zoom no slide que está visível agora
+    const api = { start, stop, go };
+
+    // clique no carrossel = zoom, começando no slide visível agora
     show.addEventListener('click', e => {
       if (e.target.closest('.slide-dots')) return;
-      openLightbox(slides[current]);
+      openLightbox(slides, current, api);
     });
 
-    shows.push({ start, stop });
+    shows.push(api);
     start();
   });
 
-  // imagens avulsas dos cards (uma foto só) também abrem em zoom
+  // imagens avulsas dos cards (que não estão em carrossel) também abrem em zoom
   document.querySelectorAll('.nav-card-media img').forEach(img => {
-    img.addEventListener('click', () => openLightbox(img));
+    if (img.closest('.slideshow')) return;   // essas já são tratadas acima
+    img.addEventListener('click', () => openLightbox([img], 0, null));
   });
 
   if (lightbox) {
-    // retoma os carrosséis quando o zoom é fechado
-    lightbox.addEventListener('close', () => shows.forEach(s => s.start()));
+    btnNext.addEventListener('click', () => lbGo(gIdx + 1));
+    btnPrev.addEventListener('click', () => lbGo(gIdx - 1));
+
+    // setas do teclado
+    document.addEventListener('keydown', e => {
+      if (!lightbox.open || group.length < 2) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); lbGo(gIdx + 1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); lbGo(gIdx - 1); }
+    });
+
+    // deslizar o dedo no celular
+    let startX = null;
+    lightbox.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener('touchend', e => {
+      if (startX === null || group.length < 2) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) lbGo(gIdx + (dx < 0 ? 1 : -1));
+      startX = null;
+    });
+
+    // ao fechar: o carrossel de trás para na imagem em que você parou e volta a rodar
+    lightbox.addEventListener('close', () => {
+      if (activeShow) activeShow.go(gIdx);
+      activeShow = null;
+      shows.forEach(s => s.start());
+    });
+
+    // clique no fundo ou no × fecha o zoom
     lightbox.addEventListener('click', e => {
       if (e.target === lightbox || e.target.classList.contains('lb-close')) lightbox.close();
     });
